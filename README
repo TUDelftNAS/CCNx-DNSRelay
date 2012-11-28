@@ -1,0 +1,77 @@
+DNS Relay for Content Centric Networking Architecture (CCNx)
+
+Copyright (C) 2012, Delft University of Technology, Faculty of Electrical Engineering, Mathematics and Computer Science, Network Architectures and Services, Niels van Adrichem
+
+    This file is part of ``DNS Relay for CCNx''.
+
+    ``DNS Relay for CCNx'' is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 3 as published by
+    the Free Software Foundation.
+
+    ``DNS Relay for CCNx'' is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ``DNS Relay for CCNx''.  If not, see <http://www.gnu.org/licenses/>.
+
+``DNS Relay for CCNx'' is a software package that relays DNS requests from a local client to a remote server using a CCNx Named Data Network.
+Since the NDN is used to forward the DNS request to the server, duplicate requests can be served from in-network caches.
+
+The package contains a relay-client and a relay-server.
+The relay-client acts like a local DNS server to the computer by binding on DNS port 53, and retransmitting received queries using the NDN to the relay-server.
+The relay-server listens for incoming DNS queries on the NDN, and retransmits them using UDP to a preconfigured recursive DNS server.
+Using this relay-service one enables to use NDN to efficiently retrieve information stored in the DNS system.
+
+If you have any questions or are experiencing any troubles while using this program, please contact Niels van Adrichem at n.l.m.vanadrichem _AT_ tudelft _DOT_ nl (replace the _AT_  and _DOT_ accordingly), I will gladly help you.
+
+1. Prerequisites
+2. Building
+3. Configuration and Usage
+4. Future work
+5. Contributors
+
+1. Prerequisites
+- This software has been build and tested using the CCNx architecture version 0.6.2., first of all make sure you have a working installation of version 0.6.2.
+- Make sure you have a properly configure JDK and JRE to compile and run the program, for example I use the Sun JRE and JDK 1.7.
+  
+2. Building
+	Download the source of ``DNS Relay for CCNx'' and place it in a folder of your preference (I use /home/username/tools/CCNx-RenamingFaces, from here on I assume you have a console open in this directory).
+	The compilation and running of ``DNS Relay for CCNx'' depend on a few jar-files carried along with CCNx-0.6.2 which should be in the folder lib.
+	You can either:
+		1) Extract the folder from this repository if you use CCNx 0.6.2.
+		2)	create the folder lib (mkdir lib)
+			copy the files ccn.jar, bcprov-jdk16-143.jar from $CCNX_HOME/lib (cp $CCNX_HOME/lib/ccn.jar $CCNX_HOME/lib/bcprov-jdk16-143.jar lib)
+		3) create a symlink to your $CCNX_HOME/lib folder (in case you frequently patch your CCNx) (ln -s $CCNX_HOME/lib lib) and 
+		2 and 3b) Download org.xbill.dns_2.1.3.jar from http://www.dnsjava.org and save it in the lib folder.
+
+	Run tools/compile.sh to build the source.
+	A folder named bin holding the class-files is created automatically
+
+3. Configuration and Usage
+	The relay-client can be starting by using the following parameters on the class "Relay":
+		"client"; indicating that you want to start the client-side relay.
+		<NDN-name>; containing the NDN name under which the relay-server is available. Be sure that this address is routable within your network.
+	The file tools/relay-client contains an example of running the client.
+	Be sure to
+		a) shutdown any local DNS-servers in advance (use `netstat -an | grep 53' to check if any are running)
+		b) configure your OS to use 127.0.0.1 as DNS server, as the client will act like it is a local DNS server
+		c) run the client as root or use sudo if your OS disallows registering low-numbered port-numbers.
+		
+	The relay-server can be started by using the following parameters on the class "Relay":
+		"server"; indicating that you want to start the server-side relay.
+		<NDN-name>; the name under which this service is reachable for its clients.
+		[<IP-address>]; optionally, the IP address of a DNS server if you want to use another DNS server than the locally configured DNS-server.
+	The file tools/relay-server contains an example of running the server relay.
+		
+4. Future work
+	- Currently there is only support for single-question queries, which make up the largest part of all DNS traffic.
+	  We need to consider if we want to enhance the relaying mechanism to also support TSIG, UPDATE and other queries.
+	
+5. Contributors  
+	Implementation and Testing: Ir. Niels L.M. van Adrichem (Delft University of Technology)
+	Advising: Special thanks go to Dr. ir. Fernando Kuipers (Delft University of Technology) 
+	
+6. Acknowledgments
+	This project could not have been possible without the efforts of Brian Wellington on the `dnsjava' project, this implementation relies heavily on his library (http://www.dnsjava.org).
