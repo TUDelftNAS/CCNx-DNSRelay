@@ -37,7 +37,7 @@ If you have any questions or are experiencing any troubles while using this prog
 - Make sure you have a properly configure JDK and JRE to compile and run the program, for example I use the Sun JRE and JDK 1.7.
   
 2. Building
-	Download the source of ``DNS Relay for CCNx'' and place it in a folder of your preference (I use /home/username/tools/CCNx-RenamingFaces, from here on I assume you have a console open in this directory).
+	Download the source of ``DNS Relay for CCNx'' and place it in a folder of your preference (I use /home/username/tools/CCNx-DNSRelay, from here on I assume you have a console open in this directory).
 	The compilation and running of ``DNS Relay for CCNx'' depend on a few jar-files carried along with CCNx-0.6.2 which should be in the folder lib.
 	You can either:
 		1) Extract the folder from this repository if you use CCNx 0.6.2.
